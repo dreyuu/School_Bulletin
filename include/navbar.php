@@ -12,8 +12,13 @@
 
 <body>
     <header>
-        <div class="logo"><i class="fas fa-bullhorn"></i> School Bulletin</div>
-        <nav>
+        <div class="header-top">
+            <div class="logo"><i class="fas fa-bullhorn"></i> School Bulletin</div>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="nav-links">
             <a href="dashboard.php" class="admin"><i class="fas fa-chart-line"></i> Dashboard</a>
             <a href="announcement.php" class="student professor admin"><i class="fas fa-bullhorn"></i> Announcements</a>
             <a href="announcement_dashboard.php" class="admin"><i class="fas fa-comment-dots"></i> Announcements Dashboard</a>
@@ -23,11 +28,17 @@
                 <i class="fas fa-moon"></i>
             </button>
             <h3 class="user"></h3>
-            <button href="#" class="logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            <button class="logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </nav>
     </header>
 
+
     <script>
+        function toggleMobileMenu() {
+            document.querySelector('.nav-links').classList.toggle('show');
+        }
+
+
         function toggleTheme() {
             document.body.classList.toggle('dark');
         }

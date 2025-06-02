@@ -196,9 +196,7 @@ html {
     font-size: 16px;
 }
 
-
-/* Nav Bar */
-
+/* Base Nav Bar */
 header {
     background-color: var(--color-primary);
     color: white;
@@ -208,11 +206,18 @@ header {
     align-items: center;
     height: 70px;
     padding-inline: var(--spacing-lg);
+    flex-wrap: nowrap; /* Stay in one line on desktop */
 }
 
 .logo {
     font-size: 1.2rem;
     font-weight: bold;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 nav a {
@@ -274,7 +279,6 @@ nav .user {
     font-family: 'Segoe UI', 'Roboto', sans-serif;
 }
 
-
 nav .logout {
     display: inline-flex;
     align-items: center;
@@ -291,15 +295,76 @@ nav .logout {
     margin-left: 10px;
 }
 
-nav .logout i {
-    font-size: 1rem;
-}
-
 nav .logout:hover {
     background-color: var(--color-disabled);
     color: var(--color-disabled-text);
     transform: translateY(-2px);
 }
+
+/* Mobile Menu Button (Hidden on Desktop) */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+        align-self: flex-end;
+        margin-bottom: 0.5rem;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--color-primary);
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .nav-links a,
+    .nav-links .icon-btn,
+    .nav-links .logout,
+    .nav-links .user {
+        padding: 0.75rem 1rem;
+        width: 100%;
+        text-align: left;
+        font-size: 1rem;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    nav {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    nav .logout {
+        margin-left: 0;
+    }
+
+    nav .user {
+        margin-left: 0;
+    }
+}
+
+
 
 main {
     padding: var(--spacing-lg);
@@ -672,6 +737,22 @@ table tbody tr:hover {
     background-color: var(--color-disabled);
 }
 
+.card-export {
+    background-color: var(--color-info);
+}
+
+.export-btn {
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    font-size: var(--btn-font-size);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-bg);
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
 /* Right side: Charts take remaining space */
 .charts-flex {
     display: flex;
@@ -693,22 +774,52 @@ table tbody tr:hover {
 }
 
 @media (max-width: 768px) {
+    .dashboard-container {
+        width: 100%;
+        padding: 20px 10px;
+    }
+
     .dashboard-cards-and-chart {
         flex-direction: column;
+        gap: 20px;
     }
 
     .dashboard-cards {
         width: 100%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 15px;
     }
 
     .card {
-        flex: 1 1 calc(33% - 10px);
-        min-width: 160px;
+        flex: 1 1 100%;
+        min-width: auto;
+    }
+
+    .charts-flex {
+        width: 100%;
+    }
+
+    .chart-container,
+    .dashboard-chart-container {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .card h3 {
+        font-size: 1rem;
+    }
+
+    .card .icon {
+        font-size: 1.5rem;
+    }
+
+    canvas {
+        width: 100% !important;
+        height: auto !important;
     }
 }
+
 
 
 
@@ -843,7 +954,7 @@ textarea {
     font-weight: 500;
 }
 
-.approved{
+.approved {
     background-color: var(--color-approve);
     /* green */
     color: #fff;
@@ -880,6 +991,7 @@ textarea {
     width: 80%;
     min-height: 80vh;
 }
+
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -965,12 +1077,15 @@ textarea {
 .ag-courses-item_bg.reminder {
     background-color: var(--color-cancel);
 }
+
 .ag-courses-item_bg.urgent {
     background-color: var(--color-delete);
 }
+
 .ag-courses-item_bg.important {
     background-color: var(--color-approve);
 }
+
 .ag-courses-item_bg {
     background-color: var(--color-approve);
 }
@@ -979,12 +1094,14 @@ textarea {
 .ag-courses-item_link:hover .ag-courses-item_title,
 .ag-courses-item_link:hover .ag-courses-item_date-box,
 .ag-courses-item_link:hover .ag-courses-item_date {
-  color: white; /* or any highlight color you prefer */
+    color: white;
+    /* or any highlight color you prefer */
 }
 
 .ag-courses-item_link:hover .ag-courses-item_category,
 .ag-courses-item_link:hover .ag-courses-item_desc {
-  color: var(--color-text); /* or any highlight color you prefer */
+    color: var(--color-text);
+    /* or any highlight color you prefer */
 }
 
 .admin {
@@ -1006,6 +1123,7 @@ textarea {
 .professor {
     display: none;
 }
+
 .professor.show {
     display: inline-block;
 }

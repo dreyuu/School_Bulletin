@@ -1,5 +1,8 @@
 <?php include 'include/navbar.php'; ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 <div class="main">
+
     <div class="dashboard-container flex">
         <div class="dashboard-cards-and-chart">
             <div class="dashboard-cards fixed-cards">
@@ -44,6 +47,10 @@
                         <h3>Deleted</h3>
                         <p id="deleted-count">0</p>
                     </div>
+                </div>
+                <div class="card card-export">
+                    <i class="fas fa-file-export"></i>
+                    <button type="button" class="export-btn">Export</button>
                 </div>
             </div>
         </div>
@@ -284,7 +291,7 @@
                         <td>${formatDate(post.date)}</td>
                         <td><span class="${post.status}">${capitalize(post.status)}</span></td>
                         <td>${post.postedByName || 'N/A'}</td>
-                        <td>${post.approvedBy || 'N/A'}</td>
+                        <td>${post.approvedByName || 'N/A'}</td>
                         <td>
                             <button class="btn-icon btn-check check-post" data-id="${post.announcement_id}"><i class="fas fa-check"></i></button>
                             <button class="btn-icon btn-edit edit-post" data-id="${post.announcement_id}"><i class="fas fa-edit"></i></button>
@@ -423,7 +430,7 @@
                         // document.getElementById('expired_date').value = post.expired_date;
 
                         modalBtn.innerText = 'Update';
-                        
+
                     } else {
                         alert("Failed to load announcement: " + data.message);
                     }
@@ -457,6 +464,45 @@
                     })
                     .catch(error => console.error("Error:", error));
             })
+        }
+
+
+        async function exportToExcel() {
+            try {
+                const res = await fetch('db_queries/select/fetch_announcements_data.php');
+                const result = await res.json();
+
+                if (!result.success || !result.data || result.data.length === 0) {
+                    alert("No data to export.");
+                    return;
+                }
+
+                // Format and reorder columns
+                const cleanedData = result.data.map(item => ({
+                    "Title": item.title,
+                    "Category": item.category,
+                    "Description": item.description,
+                    "Posted Date": new Date(item.date).toLocaleString(),
+                    "Expiration Date": new Date(item.expiredDate).toLocaleDateString(),
+                    "Posted By": item.postedByName || "Unknown"
+                }));
+
+                // Generate Excel file
+                const worksheet = XLSX.utils.json_to_sheet(cleanedData);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Announcements");
+
+                XLSX.writeFile(workbook, "announcements_export.xlsx");
+
+            } catch (error) {
+                console.error("Error exporting to Excel:", error);
+            }
+        }
+        const exportBtn = document.querySelector('.export-btn');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', function() {
+                exportToExcel();
+            });
         }
 
     })

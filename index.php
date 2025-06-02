@@ -751,6 +751,3 @@
             }
         })
     </script>
-</body>
-
-</html>
